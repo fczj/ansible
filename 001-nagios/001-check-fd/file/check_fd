@@ -1,0 +1,38 @@
+#!/bin/bash
+
+#nagios status code
+STATU_OK=0
+STATU_WARNING=1
+STATU_CRITICAL=2
+STATU_UNKNOWN=3
+
+#配置报警阀值
+WARNING=${1}
+CRITICAL=${2}
+
+
+#目前连接的用户
+max_fd=0
+max_pid=0
+for pid in $(ps -aux|awk '{print $2}')
+do
+    fd=$(lsof -p ${pid} 2>/dev/null|wc -l)
+    if [ ${fd} -ge ${max_fd} ];
+    then
+	max_fd=${fd}
+	max_pid=${pid}
+    fi
+done
+process_info=$(ps -ef|grep ${max_pid}|grep -v grep)
+
+
+if [ ${max_fd} -lt ${WARNING} ];then
+	echo "进程最大FD ${max_fd},正常状态."
+	exit ${STATU_OK}
+elif [ ${max_fd} -ge ${WARNING} ]&&[ ${max_fd} -lt ${CRITICAL} ];then
+	echo "进程最大FD ${max_fd},警告."
+	exit ${STATU_WARNING}
+else
+	echo "进程最大FD ${max_fd},超过阀值${CRITICAL},进程信息:${process_info}"
+	exit ${STATU_CRITICAL}
+fi

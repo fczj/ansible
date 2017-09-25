@@ -1,0 +1,16 @@
+- hosts: web-02
+  vars:
+    - code_src: ./file/check_fd.sh
+    - code_name: "{{code_src|basename}}"
+    - code_dest: /usr/local/nagios/libexec/check_fd.sh
+    - command_name: /bin/check_fd
+    - sudo_cmd: 'Cmnd_Alias NAGIOS= /bin/check_fd'
+    - sudo_priv: 'nagios ALL = NOPASSWD: NAGIOS'
+    - nrpe_note: '#熊志标 2017-09-21添加，监控系统所有进程中打开文件描述符最多的进程'
+    - nrpe_cmd: 'command[check_fd]=sudo check_fd $ARG1$ $ARG2$'
+  tasks:
+    - include: './tasks/install_script.yml'
+    #- include: './tasks/config_sudo.yml'
+    #- include: './tasks/config_nrpe.yml'
+
+

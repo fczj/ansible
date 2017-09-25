@@ -1,0 +1,8 @@
+- name:  add cmd
+  command: sed -i "$ a{{sudo_cmd}}" /etc/sudoers
+  sudo: yes
+  sudo_user: root
+- name: add priv
+  command: sed -i "$ a{{sudo_priv}}" /etc/sudoers
+  sudo: yes
+  sudo_user: root

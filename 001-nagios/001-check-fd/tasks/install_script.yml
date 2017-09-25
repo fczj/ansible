@@ -1,0 +1,27 @@
+- name: rsync code to code dir
+  synchronize: |
+          src={{code_src}}
+          dest=/tmp/ansible
+
+- name: Foresight Front|move code to dest
+  command: mv /tmp/ansible/{{code_name}} {{code_dest}}
+  sudo: yes
+  sudo_user: root
+
+- name: change file mode
+  file:
+      path={{code_dest}}
+      owner=nagios
+      group=nagios
+      mode=700
+  sudo: yes
+  sudo_user: root
+
+- name: link scripts to /bin
+  file:
+      src={{code_dest}}
+      dest={{command_name}}
+      state=link
+  sudo: yes
+  sudo_user: root
+

@@ -1,0 +1,14 @@
+- name:  add note
+  command: sed -i "$ a{{nrpe_note}}" /usr/local/nagios/etc/nrpe.cfg
+  sudo: yes
+  sudo_user: root
+
+- name: add cmd nrpe
+  command: sed -i "$ a{{nrpe_cmd}}" /usr/local/nagios/etc/nrpe.cfg
+  sudo: yes
+  sudo_user: root
+
+- name: restart nrpe
+  command: service nrpe restart
+  sudo: yes
+  sudo_user: root
