@@ -1,4 +1,5 @@
 ## 服务配置
+```
 #熊志标 2017-09-21 增加，检查文件描述符打开数量，5000警告，6000报警
 define service{
     use                 lanjing-service
